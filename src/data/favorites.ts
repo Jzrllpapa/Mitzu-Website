@@ -1,0 +1,88 @@
+import type { FavoriteThing } from "@/types/dog";
+
+export const favoriteThings: FavoriteThing[] = [
+  {
+    id: "f1",
+    category: "foods",
+    name: "Boiled chicken",
+    description: "The good stuff, no skin, cut into 'accidentally' large pieces.",
+    emoji: "🍗",
+  },
+  {
+    id: "f2",
+    category: "foods",
+    name: "Eggs",
+    description: "Just like her dad, she likes the yolk only. No shell, no whites.",
+    emoji: "🥚",
+  },
+  {
+    id: "f3",
+    category: "treats",
+    name: "Eggnog / Egg-O",
+    description: "The treat that silences her and makes her aggressively affectionate. She will not share.",
+    emoji: "🍪",
+  },
+  {
+    id: "f4",
+    category: "treats",
+    name: "Chicken and Calcium Bones",
+    description: "Chewy, crunchy, and delicious. She will gnaw on these for minutes.",
+    emoji: "🦴",
+  },
+  {
+    id: "f5",
+    category: "toys",
+    name: "Moo the cow from Enchanted Kingdom",
+    description: "The squeaky cow that has been her favorite toy for years. She will carry it around and squeak it to get attention.",
+    emoji: "🐄",
+  },
+  {
+    id: "f6",
+    category: "toys",
+    name: "Squeaky yellow duck",
+    description: "The squeaky duck that she will chase around the house and squeak at to get attention.",
+    emoji: "🦆",
+  },
+  {
+    id: "f7",
+    category: "spot",
+    name: "Under the bed",
+    description: "The perfect spot for hiding from the world and taking long naps.",
+    emoji: "🛏️",
+  },
+  {
+    id: "f8",
+    category: "spot",
+    name: "On daddy's gaming chair",
+    description: "The perfect spot for watching the world go by and getting pets from daddy.",
+    emoji: "💺",
+  },
+  {
+    id: "f9",
+    category: "activities",
+    name: "Playful biting",
+    description: "She loves to playfully bite and nibble on her humans, especially when she's excited or wants attention.",
+    emoji: "🐶",
+  },
+  {
+    id: "f10",
+    category: "activities",
+    name: "Sleeping",
+    description: "The activity she does best, and the one she does most often. She can sleep anywhere, anytime.",
+    emoji: "💤",
+  },
+  {
+    id: "f11",
+    category: "friends",
+    name: "Miczee",
+    description: "The villain Shih-Tzu with unlimited energy.",
+    emoji: "🐾",
+  },
+  {
+    id: "f12",
+    category: "friends",
+    name: "Kulet and Cici",
+    description: "Mother and Daughter duo, living rent free in our home",
+    emoji: "🐈",
+  },
+];

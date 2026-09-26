@@ -1,0 +1,196 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ---- Typography ---- */
+  --font-display: "Baloo 2", "Fraunces", "Georgia", serif;
+  --font-quote: "Caveat", "Fraunces", cursive;
+  --font-body: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* ---- Nature palette ---- */
+  --color-cream-50: #fefcf7;
+  --color-cream-100: #f8f3e9;
+  --color-cream-200: #f0e7d4;
+  --color-beige-100: #eae0cc;
+  --color-beige-200: #ddccab;
+  --color-tan-300: #cbb28a;
+  --color-tan-400: #b5966a;
+  --color-brown-500: #8a6a4d;
+  --color-brown-600: #6b4f38;
+  --color-brown-700: #5b4130;
+  --color-brown-900: #3a2a1e;
+  --color-forest-400: #6f8a72;
+  --color-forest-500: #4a6350;
+  --color-forest-600: #35493b;
+  --color-forest-700: #2f4034;
+  --color-forest-800: #223026;
+  --color-forest-900: #16211a;
+  --color-clay-400: #c98a5e;
+  --color-clay-500: #b5714a;
+  --color-clay-600: #97572f;
+  --color-ink-950: #14100c;
+
+  /* ---- Radii ---- */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.5rem;
+
+  /* ---- Shadows (soft, warm) ---- */
+  --shadow-soft: 0 2px 8px -2px rgb(58 42 30 / 0.06), 0 12px 32px -12px rgb(58 42 30 / 0.14);
+  --shadow-soft-lg: 0 8px 24px -8px rgb(58 42 30 / 0.12), 0 24px 60px -20px rgb(58 42 30 / 0.22);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-marquee: marquee 30s linear infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-18px) rotate(3deg);
+    }
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes accordion-down {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+      opacity: 1;
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+      opacity: 1;
+    }
+    to {
+      height: 0;
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.animate-blink {
+  animation: blink 0.8s step-end infinite;
+}
+
+@layer base {
+  :root {
+    --background: var(--color-cream-100);
+    --foreground: var(--color-forest-800);
+    --card: var(--color-cream-50);
+    --card-foreground: var(--color-forest-800);
+    --popover: var(--color-cream-50);
+    --popover-foreground: var(--color-forest-800);
+    --primary: var(--color-forest-700);
+    --primary-foreground: var(--color-cream-50);
+    --secondary: var(--color-beige-100);
+    --secondary-foreground: var(--color-brown-700);
+    --muted: var(--color-beige-100);
+    --muted-foreground: var(--color-brown-500);
+    --accent: var(--color-clay-500);
+    --accent-foreground: var(--color-cream-50);
+    --border: color-mix(in oklab, var(--color-brown-500) 18%, transparent);
+    --input: color-mix(in oklab, var(--color-brown-500) 24%, transparent);
+    --ring: var(--color-forest-500);
+  }
+
+  .dark {
+    --background: var(--color-forest-900);
+    --foreground: var(--color-cream-100);
+    --card: var(--color-forest-800);
+    --card-foreground: var(--color-cream-100);
+    --popover: var(--color-forest-800);
+    --popover-foreground: var(--color-cream-100);
+    --primary: var(--color-cream-100);
+    --primary-foreground: var(--color-forest-900);
+    --secondary: var(--color-forest-700);
+    --secondary-foreground: var(--color-cream-100);
+    --muted: var(--color-forest-700);
+    --muted-foreground: var(--color-beige-200);
+    --accent: var(--color-clay-400);
+    --accent-foreground: var(--color-forest-900);
+    --border: color-mix(in oklab, var(--color-cream-100) 14%, transparent);
+    --input: color-mix(in oklab, var(--color-cream-100) 18%, transparent);
+    --ring: var(--color-clay-400);
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    font-feature-settings: "ss01" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-clay-400);
+    color: var(--color-forest-900);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .glass {
+    background-color: color-mix(in oklab, var(--color-cream-50) 65%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+  }
+  .dark .glass {
+    background-color: color-mix(in oklab, var(--color-forest-900) 55%, transparent);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .paw-underline {
+    background-image: radial-gradient(circle, currentColor 1.5px, transparent 1.6px);
+    background-size: 8px 8px;
+    background-repeat: repeat-x;
+    background-position: bottom;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
