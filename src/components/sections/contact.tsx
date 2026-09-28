@@ -93,6 +93,10 @@ export function Contact() {
                       </a>
                     );
                   })}
+                  <div>
+                    <p className="text-sm text-(--muted-foreground)">Spotify Playlist</p>
+                    <p className="font-medium">Mitzu</p>
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap gap-2 pt-1">

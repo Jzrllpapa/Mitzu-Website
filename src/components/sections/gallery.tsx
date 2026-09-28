@@ -34,9 +34,9 @@ export function Gallery() {
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
 
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [filter]);
+  // useEffect(() => {
+  //   setVisibleCount(PAGE_SIZE);
+  // }, [filter]);
 
   useEffect(() => {
     const el = sentinelRef.current;
@@ -70,7 +70,10 @@ export function Gallery() {
           {categories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setFilter(cat.id)}
+              onClick={() => {
+                setFilter(cat.id);
+                setVisibleCount(PAGE_SIZE);
+              }}
               className={cn(
                 "rounded-full border px-4 py-2 text-sm font-medium transition-all duration-300",
                 filter === cat.id

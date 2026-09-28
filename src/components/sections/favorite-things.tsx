@@ -25,9 +25,9 @@ export function FavoriteThings() {
         />
 
         <Tabs defaultValue="foods" className="mt-12">
-          <TabsList className="flex-wrap">
+          <TabsList className="flex-wrap justify-start rounded-2xl sm:rounded-full">
             {groups.map((g) => (
-              <TabsTrigger key={g.id} value={g.id}>
+              <TabsTrigger key={g.id} value={g.id} className="rounded-lg">
                 {g.label}
               </TabsTrigger>
             ))}
