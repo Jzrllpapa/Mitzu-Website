@@ -1,15 +1,21 @@
 import { useRef } from "react";
-import { MapPin } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { PawIcon } from "@/components/shared/paw-icon";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { places } from "@/data/places";
 
-function mapEmbedSrc(place: { address: string; lat?: number; lng?: number }) {
-  const query =
-    place.lat != null && place.lng != null ? `${place.lat},${place.lng}` : place.address;
-  return `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+type Place = { address: string; lat?: number; lng?: number };
+
+function mapQuery(place: Place) {
+  return place.lat != null && place.lng != null ? `${place.lat},${place.lng}` : place.address;
+}
+
+function mapEmbedSrc(place: Place) {
+  return `https://www.google.com/maps?q=${encodeURIComponent(mapQuery(place))}&output=embed`;
+}
+
+function mapLinkHref(place: Place) {
+  return `https://www.google.com/maps?q=${encodeURIComponent(mapQuery(place))}`;
 }
 
 export function Places() {
@@ -55,33 +61,42 @@ export function Places() {
           className="scrollbar-none mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4"
           style={{ scrollbarWidth: "none" }}
         >
-          {places.map((p) => (
-            <div key={p.id} className="place-card w-72 shrink-0 snap-start">
-              <Card className="overflow-hidden pt-0">
-                <div className="relative h-40 w-full">
+          {places.map((p, i) => (
+            <div key={p.id} className="place-card group w-72 shrink-0 snap-start">
+              <article className="relative overflow-hidden rounded-4xl rounded-tr-md border border-(--border) bg-(--card) transition-all duration-500 hover:-translate-y-1 hover:border-clay-500/60 hover:shadow-(--shadow-soft)">
+                <div className="relative h-44 w-full overflow-hidden">
                   <iframe
                     src={mapEmbedSrc(p)}
-                    className="size-full border-0"
+                    className="size-full border-0 grayscale-[0.6] sepia-[0.25] transition-[filter] duration-500 group-hover:grayscale-0 dark:invert dark:hue-rotate-180 dark:brightness-90"
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     title={`Map preview of ${p.name}`}
                   />
-                  <div className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-full bg-clay-500/15 text-clay-600 shadow-sm backdrop-blur dark:text-clay-400">
-                    <MapPin className="size-4.5" />
-                  </div>
+                  <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-(--card) via-transparent to-forest-900/30" />
+                  <a
+                    href={mapLinkHref(p)}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${p.name} in Google Maps`}
+                    className="absolute left-2 top-2 z-10 flex h-9 min-w-24 items-center justify-center rounded-full bg-ink-950 px-4 font-mono text-[0.65rem] uppercase tracking-widest text-cream-50 shadow-sm transition-colors hover:bg-clay-600"
+                  >
+                    Stop {String(i + 1).padStart(2, "0")}
+                  </a>
+                  <PawIcon className="pointer-events-none absolute right-4 top-4 size-5 rotate-12 text-clay-400" />
                 </div>
-                <CardContent className="p-5 pt-3">
+
+                <div className="relative px-5 pb-6">
                   {p.visitedOn && (
-                    <p className="font-mono text-xs uppercase tracking-wide text-(--muted-foreground)">
+                    <p className="-mt-9 font-display text-5xl font-semibold leading-none text-clay-500">
                       {p.visitedOn}
                     </p>
                   )}
-                  <h3 className="mt-2 font-display text-lg font-medium">{p.name}</h3>
+                  <h3 className="mt-3 font-display text-lg font-medium">{p.name}</h3>
                   {p.description && (
                     <p className="mt-1.5 text-sm text-(--muted-foreground)">{p.description}</p>
                   )}
-                </CardContent>
-              </Card>
+                </div>
+              </article>
             </div>
           ))}
         </div>

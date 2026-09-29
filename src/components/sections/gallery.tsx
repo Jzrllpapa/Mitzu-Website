@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { photos } from "@/data/photos";
 import type { PhotoCategory } from "@/types/dog";
 import { cn } from "@/lib/utils";
+import { useDisableMotion } from "@/hooks/use-disable-motion";
 
 const categories: { id: PhotoCategory | "all"; label: string }[] = [
   { id: "all", label: "All" },
@@ -26,6 +27,7 @@ export function Gallery() {
   const [loadingMore, setLoadingMore] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const photoCount = photos.length;
+  const noMotion = useDisableMotion();
 
   const filtered = useMemo(
     () => (filter === "all" ? photos : photos.filter((p) => p.category === filter)),
@@ -34,19 +36,21 @@ export function Gallery() {
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
 
-  // useEffect(() => {
-  //   setVisibleCount(PAGE_SIZE);
-  // }, [filter]);
+  const loadingRef = useRef(false);
 
   useEffect(() => {
     const el = sentinelRef.current;
-    if (!el || !hasMore || loadingMore) return;
+    if (!el || !hasMore) return;
+
+    let timeoutId: number | undefined;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting && !loadingRef.current) {
+          loadingRef.current = true;
           setLoadingMore(true);
-          window.setTimeout(() => {
+          timeoutId = window.setTimeout(() => {
             setVisibleCount((c) => Math.min(c + PAGE_SIZE, filtered.length));
+            loadingRef.current = false;
             setLoadingMore(false);
           }, SIMULATED_LOAD_DELAY);
         }
@@ -54,8 +58,14 @@ export function Gallery() {
       { rootMargin: "300px" }
     );
     observer.observe(el);
-    return () => observer.disconnect();
-  }, [hasMore, loadingMore, filtered.length]);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timeoutId);
+      loadingRef.current = false;
+      setLoadingMore(false);
+    };
+  }, [hasMore, visibleCount, filter, filtered.length]);
 
   return (
     <section id="gallery" className="bg-(--secondary)/40 py-24 sm:py-32">
@@ -63,7 +73,7 @@ export function Gallery() {
         <SectionHeading
           eyebrow={`${photoCount} photo${photoCount === 1 ? "" : "s"} and counting`}
           title="The gallery."
-          description="Every era, every haircut, every friends, and every questionable nap position."
+          description="Every era, every haircut, every friend, and every questionable nap position."
         />
 
         <div className="mt-10 flex flex-wrap gap-2">
@@ -87,16 +97,23 @@ export function Gallery() {
         </div>
 
         <PhotoProvider maskOpacity={0.9} bannerVisible={false}>
-          <motion.div layout className="mt-10 columns-1 gap-4 sm:columns-2 lg:columns-3">
+          <motion.div
+            layout={!noMotion}
+            className="mt-10 columns-1 gap-4 sm:columns-2 lg:columns-3"
+          >
             <AnimatePresence>
               {visible.map((photo, i) => (
                 <motion.div
                   key={photo.id}
-                  layout
-                  initial={{ opacity: 0, y: 24 }}
+                  layout={!noMotion}
+                  initial={noMotion ? false : { opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, delay: (i % PAGE_SIZE) * 0.04, ease: "easeOut" }}
+                  exit={noMotion ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0 }}
+                  transition={
+                    noMotion
+                      ? { duration: 0 }
+                      : { duration: 0.5, delay: (i % PAGE_SIZE) * 0.04, ease: "easeOut" }
+                  }
                   className="group relative mb-4 break-inside-avoid overflow-hidden rounded-lg shadow-(--shadow-soft)"
                 >
                   <PhotoView src={photo.src}>
