@@ -63,11 +63,11 @@ export function Places() {
         >
           {places.map((p, i) => (
             <div key={p.id} className="place-card group w-72 shrink-0 snap-start">
-              <article className="relative overflow-hidden rounded-4xl rounded-tr-md border border-(--border) bg-(--card) transition-all duration-500 hover:-translate-y-1 hover:border-clay-500/60 hover:shadow-(--shadow-soft)">
+              <article className="relative overflow-hidden rounded-4xl rounded-tr-md border border-(--border) bg-(--card) transition-all duration-500 hover:border-clay-500/60 hover:shadow-(--shadow-soft)">
                 <div className="relative h-44 w-full overflow-hidden">
                   <iframe
                     src={mapEmbedSrc(p)}
-                    className="size-full border-0 grayscale-[0.6] sepia-[0.25] transition-[filter] duration-500 group-hover:grayscale-0 dark:invert dark:hue-rotate-180 dark:brightness-90"
+                    className="absolute inset-x-0 -top-20 h-[calc(100%+5rem)] w-full border-0 grayscale-[0.6] sepia-[0.25] transition-[filter] duration-500 group-hover:grayscale-0 dark:invert dark:hue-rotate-180 dark:brightness-90"
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     title={`Map preview of ${p.name}`}
